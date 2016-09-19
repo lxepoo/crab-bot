@@ -7,13 +7,13 @@
 
 [crab-bot-sender]：消息发送者，一个前端应用，用户通过此应用发起会话、消息、获取反馈等。
 
-[crab-bot-center]：消息协调中心，主要用于对消息进行存储、调用路由、反馈消息。
+[crab-bot-center]：消息协调中心，主要用于对消息进行存储、调用路由、提供反馈消息。
 
 [crab-bot-router]：消息路由器，用于对消息进行多元化处理，转发到指定的收听者进行处理。
 
 [crab-bot-listener]：消息收听者，用于处理各种消息，可以自定义。
 
-#Crab Droid
+#Crab Bot
 
 Subject to the use of PHP development, at least the need for PHP 5.5 and above versions.
 
