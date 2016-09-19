@@ -4,20 +4,18 @@ namespace lxepoo\crabbot\core;
 
 use \Exception;
 
-class Object
-{
-    public static function className()
-    {
+class Object {
+
+    public static function className() {
         return get_called_class();
     }
-
-    public function init()
-    {
-
+    
+    public static function test() {
+        return 'fdsafsda'
     }
 
-    public function __get($name)
-    {
+
+    public function __get($name) {
         $getter = 'get' . $name;
         if (method_exists($this, $getter)) {
             return $this->$getter();
@@ -28,8 +26,7 @@ class Object
         }
     }
 
-    public function __set($name, $value)
-    {
+    public function __set($name, $value) {
         $setter = 'set' . $name;
         if (method_exists($this, $setter)) {
             $this->$setter($value);
@@ -40,8 +37,7 @@ class Object
         }
     }
 
-    public function __isset($name)
-    {
+    public function __isset($name) {
         $getter = 'get' . $name;
         if (method_exists($this, $getter)) {
             return $this->$getter() !== null;
@@ -50,8 +46,7 @@ class Object
         }
     }
 
-    public function __unset($name)
-    {
+    public function __unset($name) {
         $setter = 'set' . $name;
         if (method_exists($this, $setter)) {
             $this->$setter(null);
@@ -60,28 +55,24 @@ class Object
         }
     }
 
-    public function __call($name, $params)
-    {
+    public function __call($name, $params) {
         throw new Exception('Calling unknown method: ' . get_class($this) . "::$name()");
     }
 
-    public function hasProperty($name, $checkVars = true)
-    {
+    public function hasProperty($name, $checkVars = true) {
         return $this->canGetProperty($name, $checkVars) || $this->canSetProperty($name, false);
     }
 
-    public function canGetProperty($name, $checkVars = true)
-    {
+    public function canGetProperty($name, $checkVars = true) {
         return method_exists($this, 'get' . $name) || $checkVars && property_exists($this, $name);
     }
 
-    public function canSetProperty($name, $checkVars = true)
-    {
+    public function canSetProperty($name, $checkVars = true) {
         return method_exists($this, 'set' . $name) || $checkVars && property_exists($this, $name);
     }
 
-    public function hasMethod($name)
-    {
+    public function hasMethod($name) {
         return method_exists($this, $name);
     }
+
 }
