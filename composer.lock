@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "96b78b89b53b91cfbc909abd6af43529",
+    "hash": "f8b8fe0cb41ade9e1fe1f50592fb82a1",
     "content-hash": "575d2a88699e67119280ca0923ffbae0",
     "packages": [
         {
@@ -17,7 +17,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/catfan/Medoo/2601ffd53971866695c544c955d580d3d36b3848.zip",
+                "url": "https://api.github.com/repos/catfan/Medoo/zipball/2601ffd53971866695c544c955d580d3d36b3848",
                 "reference": "2601ffd53971866695c544c955d580d3d36b3848",
                 "shasum": ""
             },

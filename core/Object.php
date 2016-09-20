@@ -1,6 +1,6 @@
 <?php
 
-namespace lxepoo\crabbot\core;
+namespace Crabbot\Core;
 
 use \Exception;
 
@@ -10,11 +10,6 @@ class Object {
         return get_called_class();
     }
     
-    public static function test() {
-        return 'fdsafsda'
-    }
-
-
     public function __get($name) {
         $getter = 'get' . $name;
         if (method_exists($this, $getter)) {
