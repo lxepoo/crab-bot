@@ -2,7 +2,7 @@
 
 //error_reporting(E_ALL);
 echo "<h2>tcp/ip connection </h2>\n";
-$service_port = 12130;
+$service_port = 8989;
 $address = '127.0.0.1';
 
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
@@ -19,7 +19,7 @@ if ($result === false) {
 } else {
     echo "OK \n";
 }
-$in = "HEAD / http/1.1\r\n";
+$in = "GET / http/1.1\r\n";
 $in .= "HOST: localhost \r\n";
 $in .= "Connection: close\r\n\r\n";
 $out = "";

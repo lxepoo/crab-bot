@@ -4,12 +4,39 @@ namespace Crabbot\Core;
 
 use \Exception;
 
+/**
+ * 基类
+ * 部分摘自Yii2的Object类
+ */
 class Object {
 
+    //返回类名
     public static function className() {
         return get_called_class();
     }
-    
+
+    //构造函数，自动属性赋值、执行init方法
+    public function __construct($config = []) {
+        if (!empty($config)) {
+            $this->configure($this, $config);
+        }
+        $this->init();
+    }
+
+    //自动属性赋值函数
+    protected function configure($object, $properties) {
+        foreach ($properties as $name => $value) {
+            $object->$name = $value;
+        }
+
+        return $object;
+    }
+
+    //空方法，用于被继承覆盖
+    public function init() {
+        
+    }
+
     public function __get($name) {
         $getter = 'get' . $name;
         if (method_exists($this, $getter)) {
@@ -68,6 +95,15 @@ class Object {
 
     public function hasMethod($name) {
         return method_exists($this, $name);
+    }
+
+    public function toArray() {
+        $_arr = is_object($this) ? get_object_vars($this) : $this;
+        foreach ($_arr as $key => $val) {
+            $val = (is_array($val) || is_object($val)) ? object_to_array($val) : $val;
+            $arr[$key] = $val;
+        }
+        return $arr;
     }
 
 }
