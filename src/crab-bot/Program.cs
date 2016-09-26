@@ -1,10 +1,7 @@
-﻿using CrabBot.Common;
+﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 
 namespace CrabBot
 {
@@ -12,6 +9,17 @@ namespace CrabBot
     {
         public static void Main(string[] args)
         {
+
+            //var data = new
+            //{
+            //    Name = "Changwei",
+            //    Age = 23
+            //};
+
+            //var json = JObject.FromObject(data);
+
+            //Console.WriteLine(json.ToString());
+  
             //强制指定输出编码为Unicode，否则中文会乱码
             Console.OutputEncoding = System.Text.Encoding.Unicode;
 
@@ -44,10 +52,7 @@ namespace CrabBot
                 SocketThread socketThread = new SocketThread(handler);
             }
 
-           
-
-            Common.Tools.PrintLn("程序结束...");
-
+            //Common.Tools.PrintLn("程序结束...");
             //server.BeginAccecpt(new AsyncCallback(Accept), server);
         }
 

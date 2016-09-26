@@ -6,13 +6,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CrabBot.Common
+namespace CrabBot
 {
     public class SocketThread : IDisposable
     {
         private Socket socket;
         private Thread thread;
         private string text;
+        private int id;
 
         public SocketThread(Socket socket)
         {
@@ -23,10 +24,19 @@ namespace CrabBot.Common
 
         public void Work()
         {
+            //获取线程ID
+            this.id = Thread.CurrentThread.ManagedThreadId;
+
+            //因为是循环使用，所以此处需要判断socket是否关闭
+            Common.Tools.PrintLn("Thread" + this.id + "：开始获取数据流...");
+            if (socket.Connected != true)
+            {
+                Common.Tools.PrintLn("Thread" + this.id + "：Socket连接已关闭，本线程结束...", ConsoleColor.Red);
+                return;
+            }
+
             //定义一个变量，存储客户端发来的信息
             string content = string.Empty;
-
-            Common.Tools.PrintLn("开始读取包内数据...");
             socket.ReceiveBufferSize = 4096;
             byte[] buffer = new byte[4096];
             while (true)
@@ -40,29 +50,14 @@ namespace CrabBot.Common
                 {
                     break;
                 }
-
-                
-
-                //<EOF>是自定义的协议，表示中止消息交流，适用于取消发送消息之类的 
-                //if (text.IndexOf("<EOF>") > -1)
-                ////if (receivedLength == 0)
-                //{
-                //    isListening = false;
-                //    socket.Send(new byte[] { 0 });
-                //}
-                //else
-                //{
-                //    //Console.WriteLine("接收到的数据：" + text);  
-                //    //根据客户端的请求获取相应的响应信息  
-                //    string message = GetMessage(text);
-                //    //将响应信息以字节的方式发送到客户端  
-                //    //socket.Send(Encoding.UTF8.GetBytes(message));
-                //}
             }
 
-            Common.Tools.PrintLn("包内数据读取完毕!");
+            Common.Tools.PrintLn("Thread" + this.id + "：包内数据读取完毕!");
             Common.Tools.PrintLn(content, ConsoleColor.Red);
-            socket.Send(new byte[] { 0 });
+            socket.Send(Encoding.UTF8.GetBytes("hello!你好世界"));
+
+            //重复执行
+            this.Work();
         }
         
         /// <summary>

@@ -23,7 +23,7 @@ namespace CrabBot.Common
         /// <param name="text">需要输出的文字</param>
         public static void PrintLn(string text)
         {
-            Console.WriteLine(" " + text + "\n");
+            Console.WriteLine(text + "\n");
             //StreamWriter sw = File.AppendText("./logs.txt");
             //string w = text + "\r\n";
             //sw.Write(w);
@@ -38,7 +38,7 @@ namespace CrabBot.Common
         public static void PrintLn(string text, ConsoleColor color)
         {
             Console.ForegroundColor = color;
-            Console.WriteLine(" " + text + "\n");
+            Console.WriteLine(text + "\n");
             Console.ForegroundColor = ConsoleColor.White;
             //StreamWriter sw = File.AppendText("./logs.txt");
             //string w = text + "\r\n";
