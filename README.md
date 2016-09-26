@@ -1,6 +1,6 @@
 #螃蟹机器人
 
-主体使用PHP开发，至少需要PHP 5.5及以上版本。
+主体使用.Net Core 1.0 开发。
 
 
 工作分为3个部分：
@@ -14,8 +14,6 @@
 [crab-bot-listener]：消息收听者，用于处理各种消息，可以自定义。
 
 #Crab Bot
-
-Subject to the use of PHP development, at least the need for PHP 5.5 and above versions.
 
 Work is divided into 3 parts:
 
