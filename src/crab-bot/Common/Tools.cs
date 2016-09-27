@@ -45,5 +45,16 @@ namespace CrabBot.Common
             //sw.Write(w);
             //sw.Close();
         }
+
+        /// <summary>  
+        /// 根据GUID获取16位的唯一字符串  
+        /// </summary>  
+        public static string GuidTo16String()
+        {
+            long i = 1;
+            foreach (byte b in Guid.NewGuid().ToByteArray())
+                i *= ((int)b + 1);
+            return string.Format("{0:x}", i - DateTime.Now.Ticks);
+        }
     }
 }

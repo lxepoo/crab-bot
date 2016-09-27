@@ -52,9 +52,36 @@ namespace CrabBot
                 }
             }
 
-            Common.Tools.PrintLn("Thread" + this.id + "：包内数据读取完毕!");
-            Common.Tools.PrintLn(content, ConsoleColor.Red);
-            socket.Send(Encoding.UTF8.GetBytes("hello!你好世界"));
+
+            //开始处理并返回
+            Model.Result result = new Model.Result();
+            Model.Message message = new Model.Message();
+
+            try
+            {
+                //解析本次的消息
+                message = Json<Model.Message>.JsonDecode(content);
+                result.RequestId = message.RequestId;
+                result.RequestTarget = message.RequestTarget;
+                result.Sponsor = message.Sponsor;
+
+                //触发路由
+
+
+            }
+            catch
+            {
+                result.RequestId = message.RequestId;
+
+                //设置返回状态为False
+                result.RequestState = false;
+
+                //构建一个错误返回
+                result.Body = new Model.Error() { ErrorCode = "0001", Content = "无法完成消息格式化解析，请检查所发送的内容是否符合规范！" };               
+            }
+
+            //发送一个返回
+            socket.Send(Encoding.UTF8.GetBytes(Json<Model.Result>.JsonEncode(result)));
 
             //重复执行
             this.Work();
@@ -65,14 +92,17 @@ namespace CrabBot
         /// </summary>
         public void Dispose()
         {
-            if (thread != null)
-            {
-                thread = null;
-            }
+            //关闭连接
             if (socket != null)
             {
                 socket.Shutdown(SocketShutdown.Both);
                 socket.Dispose();
+            }
+
+            //置空线程
+            if (thread != null)
+            {
+                thread = null;
             }
         }
     }

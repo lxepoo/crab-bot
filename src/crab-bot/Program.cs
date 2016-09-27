@@ -10,16 +10,13 @@ namespace CrabBot
         public static void Main(string[] args)
         {
 
-            //var data = new
-            //{
-            //    Name = "Changwei",
-            //    Age = 23
-            //};
+            //Model.Message test = new Model.Message();
+            //test.Body = "fdsafdsafsda";
+            //test.RequestRoute = "fdsafdsafdsafsda";
+            //test.Sponsor = null;
+            //Common.Tools.PrintLn(Json<Model.Message>.JsonEncode(test));
 
-            //var json = JObject.FromObject(data);
 
-            //Console.WriteLine(json.ToString());
-  
             //强制指定输出编码为Unicode，否则中文会乱码
             Console.OutputEncoding = System.Text.Encoding.Unicode;
 
