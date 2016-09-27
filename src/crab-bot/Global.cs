@@ -12,12 +12,12 @@ namespace CrabBot
         /// <summary>
         /// 所有机器人的集合
         /// </summary>
-        public static List<Model.Bot> bots = new List<Model.Bot>();
+        public static Dictionary<string, Model.Bot> bots = new Dictionary<string, Model.Bot>();
 
         /// <summary>
         /// 所有用户的集合
         /// </summary>
-        public static List<Model.User> users = new List<Model.User>();
+        public static Dictionary<string, Model.User> users = new Dictionary<string, Model.User>();
 
 
         /// <summary>
@@ -26,28 +26,30 @@ namespace CrabBot
         /// <param name="bot"></param>
         public static void RegisterBot(Model.Bot bot)
         {
-            //判断集合里是否有同名机器人，如果有先删掉
-            if (Global.bots.Exists(delegate (Model.Bot t) { return t.BotId == bot.BotId; }))
+            //判断是否存在同名的机器人，有则覆盖
+            if (Global.bots.Keys.Contains(bot.BotId))
             {
-                var temp = Global.bots.Find(delegate (Model.Bot t) { return t.BotId == bot.BotId; });
-                Global.bots.Remove(temp);
+                Global.bots[bot.BotId] = bot;
             }
-
-            //添加机器人实例到集合
-            Global.bots.Add(bot);
+            else
+            {
+                //如果没有，就添加到集合
+                Global.bots.Add(bot.BotId, bot);
+            }
         }
 
         public static void RegisterUser(Model.User user)
         {
-            //判断集合里是否有同UID用户，如果有先删掉
-            if (Global.users.Exists(delegate (Model.User t) { return t.Uid == user.Uid; }))
+            //判断是否存在同名的用户，有则覆盖
+            if (Global.users.Keys.Contains(user.Uid))
             {
-                var temp = Global.users.Find(delegate (Model.User t) { return t.Uid == user.Uid; });
-                Global.users.Remove(temp);
+                Global.users[user.Uid] = user;
             }
-
-            //添加用户实例到集合
-            Global.users.Add(user);
+            else
+            {
+                //如果没有，就添加到集合
+                Global.users.Add(user.Uid, user);
+            }
         }
     }
 }

@@ -9,20 +9,20 @@ namespace CrabBot
     {
         public static void Main(string[] args)
         {
-
-            //Model.Message test = new Model.Message();
-            //test.Body = "fdsafdsafsda";
-            //test.RequestRoute = "fdsafdsafdsafsda";
-            //test.Sponsor = null;
-            //Common.Tools.PrintLn(Json<Model.Message>.JsonEncode(test));
-
-
             //强制指定输出编码为Unicode，否则中文会乱码
             Console.OutputEncoding = System.Text.Encoding.Unicode;
 
             Common.Tools.PrintLn("程序启动中...");
 
+            //注册一个系统机器人
+            Model.Bot SysBot = new Model.Bot();
+            SysBot.BotId = "system";
+            SysBot.Name = "系统机器人";
+            SysBot.Description = "系统机器人主要用于维护整个机器人系统，比如：注册用户、注册机器人、配置相关等。";
+            Global.RegisterBot(SysBot);
+
             //定义监听信息
+            Common.Tools.PrintLn("开始创建Socket服务器...");
             IPAddress local = IPAddress.Parse("0.0.0.0");
             IPEndPoint iep = new IPEndPoint(local, 8989);
 
@@ -51,14 +51,6 @@ namespace CrabBot
 
             //Common.Tools.PrintLn("程序结束...");
             //server.BeginAccecpt(new AsyncCallback(Accept), server);
-        }
-
-        void Accept(IAsyncResult iar)
-        {
-            //还原传入的原始套接字
-            Socket MyServer = (Socket)iar.AsyncState;
-            //在原始套接字上调用EndAccept方法，返回新的套接字
-          //  Socket service = MyServer.EndAccept(iar);
         }
     }
 }
