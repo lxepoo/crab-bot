@@ -16,6 +16,8 @@ namespace CrabBot
 
             //注册一个系统机器人
             Model.Bot SysBot = new Model.Bot();
+            SysBot.Class = Model.BotClass.System;
+            SysBot.Status = Model.BotStatus.Online;
             SysBot.BotId = "system";
             SysBot.Name = "系统机器人";
             SysBot.Description = "系统机器人主要用于维护整个机器人系统，比如：注册用户、注册机器人、配置相关等。";
@@ -37,7 +39,7 @@ namespace CrabBot
             //监听
             server.Listen(20);
 
-            //开始监听连接  
+            //开始监听连接
             while (true)
             {
                 Console.WriteLine("等待客户端连接...");
@@ -48,9 +50,6 @@ namespace CrabBot
                 //启用一个新的线程用于处理客户端连接  ，这样主线程还可以继续接受客户端连接  
                 SocketThread socketThread = new SocketThread(handler);
             }
-
-            //Common.Tools.PrintLn("程序结束...");
-            //server.BeginAccecpt(new AsyncCallback(Accept), server);
         }
     }
 }

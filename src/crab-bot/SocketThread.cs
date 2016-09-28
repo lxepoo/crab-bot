@@ -66,8 +66,8 @@ namespace CrabBot
                 result.Sponsor = message.Sponsor;
 
                 //触发路由
-
-
+                Router router = new Router(message);
+                result.Body =Json<object>.JsonEncode(router.Execute());
             }
             catch
             {
@@ -77,7 +77,7 @@ namespace CrabBot
                 result.RequestState = false;
 
                 //构建一个错误返回
-                result.Body = new Model.Error() { ErrorCode = "0001", Content = "无法完成消息格式化解析，请检查所发送的内容是否符合规范！" };               
+                result.Body = new Errors.RequestFormatError();         
             }
 
             //发送一个返回

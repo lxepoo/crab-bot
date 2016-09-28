@@ -1,20 +1,31 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace CrabBot
 {
     public class Router
     {
-
-        //protected object 
-
-
+        /// <summary>
+        /// 请求消息
+        /// </summary>
         private Model.Message message;
+
+        /// <summary>
+        /// 请求的机器人ID
+        /// </summary>
+        private string BotId;
+
+        /// <summary>
+        /// 请求的命令
+        /// </summary>
+        private string Command;
+
+        /// <summary>
+        /// 机器人实例
+        /// </summary>
+        private object BotInstance;
 
         /// <summary>
         /// 构造函数
@@ -23,6 +34,7 @@ namespace CrabBot
         {
             this.message = _message;
         }
+        
 
         /// <summary>
         /// 解析请求
@@ -46,6 +58,10 @@ namespace CrabBot
                 return false;
             }
 
+            //将解析好的路由赋值
+            this.BotId = path[0];
+            this.Command = path[1];
+
             return true;
         }
 
@@ -55,7 +71,53 @@ namespace CrabBot
         /// <returns></returns>
         public object Execute()
         {
-            return null;
+            //先解析一下请求
+            if (!this.TargetAnalytic())
+            {
+                return new Errors.CommandFormatError();
+            }
+
+            //检查所请求的机器人是否存在
+            if (!Global.bots.Keys.Contains(this.BotId))
+            {
+                return new Errors.BotNotExistError(this.BotId);
+            }
+
+            //获取机器人功能对象
+            this.BotInstance = Global.bots[this.BotId].Instance();
+
+            switch (Global.bots[this.BotId].Class)
+            {
+                case Model.BotClass.System:
+                    return RunSystemBot();
+                case Model.BotClass.Chat:
+                    return RunSystemBot();
+                case Model.BotClass.Custom:
+                    return RunSystemBot();
+                default:
+                    return new Errors.BotClassError(this.BotId);
+            }
+        }
+
+        /// <summary>
+        /// 系统机器人处理流程
+        /// </summary>
+        /// <returns></returns>
+        public object RunSystemBot()
+        {
+
+            var bot = this.BotInstance as Bots.SystemBot;
+            
+            //检查命令是否存在
+            if (!bot.CommandList().Keys.Contains(this.Command))
+            {
+                return new Errors.BotNotExistError(this.BotId);
+            }
+
+            Type t = bot.GetType();
+            MethodInfo mi = t.GetMethod(this.Command);
+
+            return mi.Invoke(bot, null);
         }
     }
 }
