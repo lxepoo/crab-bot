@@ -115,9 +115,10 @@ namespace CrabBot
             }
 
             Type t = bot.GetType();
-            MethodInfo mi = t.GetMethod(this.Command);
+            MethodInfo method = t.GetMethod(this.Command);
 
-            return mi.Invoke(bot, null);
+            //通过反射的方式执行命令（方法）
+            return method.Invoke(bot, null);
         }
     }
 }
