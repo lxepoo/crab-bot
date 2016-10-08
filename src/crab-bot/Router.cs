@@ -111,7 +111,7 @@ namespace CrabBot
             //检查命令是否存在
             if (!bot.CommandList().Keys.Contains(this.Command))
             {
-                return new Errors.BotNotExistError(this.BotId);
+                return new Errors.CommandNotExistError(this.Command);
             }
 
             Type t = bot.GetType();

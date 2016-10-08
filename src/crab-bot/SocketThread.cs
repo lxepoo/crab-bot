@@ -41,7 +41,19 @@ namespace CrabBot
             byte[] buffer = new byte[4096];
             while (true)
             {
-                int receivedLength = socket.Receive(buffer);
+                int receivedLength = 0;
+
+                //防止客户端主动断开后出现错误，此处加个异常
+                try
+                {
+                    receivedLength = socket.Receive(buffer);
+                }
+                catch(Exception ex)
+                {
+                    Common.Tools.PrintLn("Thread" + this.id + "：" + ex.Message, ConsoleColor.Red);
+                    return;
+                }
+
                 text = System.Text.Encoding.UTF8.GetString(buffer, 0, receivedLength);
                 content = content + text;
 
@@ -67,11 +79,12 @@ namespace CrabBot
 
                 //触发路由
                 Router router = new Router(message);
-                result.Body =Json<object>.JsonEncode(router.Execute());
+                var RouterResult = router.Execute();
+                result.Body =Json<object>.JsonEncode(RouterResult);
             }
-            catch
+            catch(Exception ex)
             {
-                result.RequestId = message.RequestId;
+                result.RequestId = null;
 
                 //设置返回状态为False
                 result.RequestState = false;

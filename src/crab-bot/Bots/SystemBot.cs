@@ -16,9 +16,9 @@ namespace CrabBot.Bots
         /// 打招呼，自我介绍
         /// </summary>
         /// <returns></returns>
-        public string Hello()
+        public Model.CommandResult Hello()
         {
-            return "你好，我是自带的机器人，主要用于系统级维护。";
+            return new Model.CommandResult() { Data = "你好，我是自带的机器人，主要用于系统级维护。" };
         }
 
         /// <summary>

@@ -10,7 +10,7 @@ namespace CrabBot
         /// <summary>
         /// 打招呼，用于输出一些简介之类的东西，通常客户端会自动请求这个命令
         /// </summary>
-        string Hello();
+        Model.CommandResult Hello();
 
         /// <summary>
         /// 返回此机器人所有的命令集合
