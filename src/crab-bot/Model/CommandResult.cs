@@ -8,17 +8,17 @@ namespace CrabBot.Model
     /// <summary>
     /// 命令返回结果实体类
     /// </summary>
-    public class CommandResult
+    /// <typeparam name="T">返回数据的真实类型</typeparam>
+    public class CommandResult<T>
     {
 
         /// <summary>
-        /// 消息主体
-        /// 可为空
+        /// 返回数据
         /// </summary>
-        public object Data { get; set; }
+        public T Data { get; set; }
 
         /// <summary>
-        /// 
+        /// 返回时间
         /// </summary>
         public string CreateAt {
             get

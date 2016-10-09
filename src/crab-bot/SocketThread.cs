@@ -80,17 +80,31 @@ namespace CrabBot
                 //触发路由
                 Router router = new Router(message);
                 var RouterResult = router.Execute();
-                result.Body =Json<object>.JsonEncode(RouterResult);
+                result.Body = Json<object>.JsonEncode(RouterResult);
+
+                //DEBUG信息
+                if (ServerGlobal.debug)
+                {
+                    Common.Tools.PrintLn("[Thread" + this.id + "]来路信息：", ConsoleColor.DarkGreen);
+                    Common.Tools.PrintLn(content, ConsoleColor.DarkCyan);
+                    Common.Tools.PrintLn("[Thread" + this.id + "]返回信息：", ConsoleColor.DarkGreen);
+                    Common.Tools.PrintLn(result.Body.ToString(), ConsoleColor.DarkCyan);
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+                if (ServerGlobal.debug)
+                {
+                    Common.Tools.PrintLn("Thread" + this.id + "：错误：" + ex.Message, ConsoleColor.Red);
+                }
+
                 result.RequestId = null;
 
                 //设置返回状态为False
                 result.RequestState = false;
 
                 //构建一个错误返回
-                result.Body = new Errors.RequestFormatError();         
+                result.Body = new Errors.RequestFormatError();
             }
 
             //发送一个返回

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using CrabBot.Model;
 
 namespace CrabBot.Bots
 {
@@ -16,22 +16,22 @@ namespace CrabBot.Bots
         /// 打招呼，自我介绍
         /// </summary>
         /// <returns></returns>
-        public Model.CommandResult Hello()
+        public CommandResult<string> Hello()
         {
-            return new Model.CommandResult() { Data = "你好，我是自带的机器人，主要用于系统级维护。" };
+            return new CommandResult<string>() { Data = "你好，我是自带的机器人，主要用于系统级维护。" };
         }
 
         /// <summary>
-        /// 
+        /// 获取所有的命令集合
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, string> CommandList()
+        public CommandResult<Dictionary<string, string>> CommandList()
         {
             Dictionary<string, string> list = new Dictionary<string, string>();
             list.Add("Hello", "自我介绍");
             list.Add("CommandList", "获取所有命令");
             list.Add("GetBots", "获取所有机器人");
-            return list;
+            return new CommandResult<Dictionary<string, string>> { Data = list };
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace CrabBot.Bots
         /// <returns></returns>
         public object GetBots()
         {
-            return Global.bots;
+            return ServerGlobal.bots;
         }
     }
 }

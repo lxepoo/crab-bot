@@ -78,15 +78,15 @@ namespace CrabBot
             }
 
             //检查所请求的机器人是否存在
-            if (!Global.bots.Keys.Contains(this.BotId))
+            if (!ServerGlobal.bots.Keys.Contains(this.BotId))
             {
                 return new Errors.BotNotExistError(this.BotId);
             }
 
             //获取机器人功能对象
-            this.BotInstance = Global.bots[this.BotId].Instance();
+            this.BotInstance = ServerGlobal.bots[this.BotId].Instance();
 
-            switch (Global.bots[this.BotId].Class)
+            switch (ServerGlobal.bots[this.BotId].Class)
             {
                 case Model.BotClass.System:
                     return RunSystemBot();
@@ -109,7 +109,7 @@ namespace CrabBot
             var bot = this.BotInstance as Bots.SystemBot;
             
             //检查命令是否存在
-            if (!bot.CommandList().Keys.Contains(this.Command))
+            if (!bot.CommandList().Data.Keys.Contains(this.Command))
             {
                 return new Errors.CommandNotExistError(this.Command);
             }
