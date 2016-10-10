@@ -16,7 +16,7 @@ namespace CrabBot.Errors
         {
             this.ErrorCode = "0004";
 
-            this.Content = "所请求的机器人不包含此命令：" + command + "，请重试！"; ;
+            this.Content = "无法找到指定命令：" + command + "，请重试！";
         }
     }
 }

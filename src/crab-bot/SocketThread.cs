@@ -50,7 +50,7 @@ namespace CrabBot
                 }
                 catch(Exception ex)
                 {
-                    Common.Tools.PrintLn("Thread" + this.id + "：" + ex.Message, ConsoleColor.Red);
+                    Common.Tools.PrintLn("Thread" + this.id + "：" + ex.ToString(), ConsoleColor.Red);
                     return;
                 }
 
@@ -82,20 +82,12 @@ namespace CrabBot
                 var RouterResult = router.Execute();
                 result.Body = Json<object>.JsonEncode(RouterResult);
 
-                //DEBUG信息
-                if (ServerGlobal.debug)
-                {
-                    Common.Tools.PrintLn("[Thread" + this.id + "]来路信息：", ConsoleColor.DarkGreen);
-                    Common.Tools.PrintLn(content, ConsoleColor.DarkCyan);
-                    Common.Tools.PrintLn("[Thread" + this.id + "]返回信息：", ConsoleColor.DarkGreen);
-                    Common.Tools.PrintLn(result.Body.ToString(), ConsoleColor.DarkCyan);
-                }
             }
             catch (Exception ex)
             {
                 if (ServerGlobal.debug)
                 {
-                    Common.Tools.PrintLn("Thread" + this.id + "：错误：" + ex.Message, ConsoleColor.Red);
+                    Common.Tools.PrintLn("Thread" + this.id + "：" + ex.ToString(), ConsoleColor.Red);
                 }
 
                 result.RequestId = null;
@@ -107,8 +99,19 @@ namespace CrabBot
                 result.Body = new Errors.RequestFormatError();
             }
 
+
             //发送一个返回
-            socket.Send(Encoding.UTF8.GetBytes(Json<Model.Result>.JsonEncode(result)));
+            string result_json = Json<Model.Result>.JsonEncode(result);
+            socket.Send(Encoding.UTF8.GetBytes(result_json));
+
+            //DEBUG信息
+            if (ServerGlobal.debug)
+            {
+                Common.Tools.PrintLn("[Thread" + this.id + "]来路信息：", ConsoleColor.DarkGreen);
+                Common.Tools.PrintLn(content, ConsoleColor.DarkCyan);
+                Common.Tools.PrintLn("[Thread" + this.id + "]返回信息：", ConsoleColor.DarkGreen);
+                Common.Tools.PrintLn(result_json, ConsoleColor.DarkCyan);
+            }
 
             //重复执行
             this.Work();

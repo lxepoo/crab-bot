@@ -19,7 +19,7 @@ namespace CrabBot.Bots
         /// 打招呼，自我介绍
         /// </summary>
         /// <returns></returns>
-        public CommandResult<string> Hello()
+        public CommandResult<string> hello()
         {
             return new CommandResult<string>() { Data = "你好，我是自带的机器人，主要用于系统级维护。" };
         }
@@ -28,22 +28,13 @@ namespace CrabBot.Bots
         /// 获取所有的命令集合
         /// </summary>
         /// <returns></returns>
-        public CommandResult<Dictionary<string, string>> CommandList()
+        public CommandResult<Dictionary<string, string>> commands()
         {
             Dictionary<string, string> list = new Dictionary<string, string>();
             list.Add("Hello", "自我介绍");
             list.Add("CommandList", "获取所有命令");
             list.Add("GetBots", "获取所有机器人");
             return new CommandResult<Dictionary<string, string>> { Data = list };
-        }
-
-        /// <summary>
-        /// 获取所有的机器人列表
-        /// </summary>
-        /// <returns></returns>
-        public object GetBots()
-        {
-            return ServerGlobal.bots;
         }
     }
 }

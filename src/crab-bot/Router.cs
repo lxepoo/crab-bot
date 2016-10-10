@@ -107,15 +107,21 @@ namespace CrabBot
         {
 
             var bot = this.BotInstance as Bots.SystemBot;
-            
-            //检查命令是否存在
-            if (!bot.CommandList().Data.Keys.Contains(this.Command))
+
+            //检查命令是否存在于命令列表中
+            if (!bot.commands().Data.Keys.Contains(this.Command))
             {
                 return new Errors.CommandNotExistError(this.Command);
             }
 
             Type t = bot.GetType();
             MethodInfo method = t.GetMethod(this.Command);
+
+            //检查代码中是否包含此方法
+            if (method == null)
+            {
+                return new Errors.MethodNotExistError(this.Command);
+            }
 
             //通过反射的方式执行命令（方法）
             return method.Invoke(bot, null);
