@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CrabBot.Model;
+using Microsoft.Data.Sqlite;
 
 namespace CrabBot.Bots
 {

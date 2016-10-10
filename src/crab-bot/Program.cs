@@ -1,7 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using Microsoft.Data.Sqlite;
 
 namespace CrabBot
 {
@@ -24,7 +25,7 @@ namespace CrabBot
             Common.Tools.PrintLn("监听端口：" + ServerGlobal.port.ToString(), ConsoleColor.Blue);
 
             //执行所有前置操作
-            init();
+            ServerInit();
 
             //定义监听信息
             Common.Tools.PrintLn("开始创建Socket服务器...");
@@ -55,7 +56,7 @@ namespace CrabBot
         /// <summary>
         /// 初始化相关的操作
         /// </summary>
-        public static void init()
+        public static void ServerInit()
         {
             //注册一个系统机器人
             Model.Bot SysBot = new Model.Bot();
@@ -65,6 +66,55 @@ namespace CrabBot
             SysBot.Name = "系统机器人";
             SysBot.Description = "系统机器人主要用于维护整个机器人系统，比如：注册用户、注册机器人、配置相关等。";
             ServerGlobal.RegisterBot(SysBot);
+
+
+            #region 检查Data文件夹等相关逻辑
+            string data_path = Directory.GetCurrentDirectory()+"/Data";
+            if (!Directory.Exists(data_path))
+            {
+                //创建目录
+                if (Directory.CreateDirectory(data_path) != null)
+                {
+                    Common.Tools.PrintLn("Data目录创建成功！", ConsoleColor.Blue);
+                }
+                else
+                {
+                    Common.Tools.PrintLn("Data目录创建失败，请检查服务环境、配置！", ConsoleColor.Red);
+                    Console.ReadLine();
+                }
+            }
+            #endregion
+
+            #region 初始化数据库连接等
+
+            //数据库路径
+            var dbPath = new SqliteConnectionStringBuilder() { DataSource = data_path + "/CrabBot.db"};
+
+            //创建数据库实例，指定文件位置，使用using是为了自动释放及close数据库连接
+            using (ServerGlobal.conn = new SqliteConnection(dbPath.ToString()))
+            {
+                try
+                {
+                    ServerGlobal.conn.Open();
+                    Common.Tools.PrintLn("SQLite数据源连接检查成功！", ConsoleColor.Blue);
+                }
+                catch(Exception ex)
+                {
+                    //无法连接到数据库，则报错并停止程序
+                    Common.Tools.PrintLn("无法连接到SQLite数据源或数据库操作出现异常，请检查服务器配置或目录权限！", ConsoleColor.Red);
+                    Common.Tools.PrintLn(ex.ToString(), ConsoleColor.Red);
+                    Console.ReadLine();
+                }
+            }
+
+            //ServerGlobal.conn.Open();
+            //ServerGlobal.conn.Open();
+            //string sql = "CREATE TABLE IF NOT EXISTS student(id integer, name varchar(20), sex varchar(2));";
+            //SqliteCommand cmd = new SqliteCommand(sql, ServerGlobal.conn);
+            //cmd.ExecuteNonQuery();//如果表不存在，创建数据表  
+
+            #endregion
+
         }
     }
 }

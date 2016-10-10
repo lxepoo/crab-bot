@@ -1,10 +1,8 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
+using Microsoft.Data.Sqlite;
 
 namespace CrabBot
 {
@@ -14,6 +12,11 @@ namespace CrabBot
         /// 是否调试模式
         /// </summary>
         public static bool debug = false;
+
+        /// <summary>
+        /// 数据库连接
+        /// </summary>
+        public static SqliteConnection conn = null;
 
         /// <summary>
         /// IP地址
