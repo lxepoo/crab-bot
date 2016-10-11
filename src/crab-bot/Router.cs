@@ -123,8 +123,17 @@ namespace CrabBot
                 return new Errors.MethodNotExistError(this.Command);
             }
 
-            //通过反射的方式执行命令（方法）
-            return method.Invoke(bot, null);
+            //通过反射的方式执行命令（方法），分为有参和无参
+            if(method.GetParameters().Length >0)
+            {
+                object[] parameters = new object[1];
+                parameters[0] = (object)this.message;
+                return method.Invoke(bot, parameters);
+            }
+            else
+            {
+                return method.Invoke(bot, null);
+            }
         }
     }
 }

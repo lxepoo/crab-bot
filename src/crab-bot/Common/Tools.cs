@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CrabBot.Common
@@ -86,7 +87,7 @@ namespace CrabBot.Common
         /// <param name="text">需要输出的文字</param>
         public static void PrintLn(string text)
         {
-            Console.WriteLine(text + "\n");
+            Console.WriteLine(text + Environment.NewLine);
             //StreamWriter sw = File.AppendText("./logs.txt");
             //string w = text + "\r\n";
             //sw.Write(w);
@@ -101,12 +102,30 @@ namespace CrabBot.Common
         public static void PrintLn(string text, ConsoleColor color)
         {
             Console.ForegroundColor = color;
-            Console.WriteLine(text + "\n");
+            Console.WriteLine(text + Environment.NewLine);
             Console.ForegroundColor = ConsoleColor.White;
-            //StreamWriter sw = File.AppendText("./logs.txt");
-            //string w = text + "\r\n";
-            //sw.Write(w);
-            //sw.Close();
+        }
+
+        /// <summary>
+        /// 打印Debug信息
+        /// </summary>
+        /// <param name="text">需要输出的文字</param>
+        /// <param name="color">颜色，默认黄色</param>
+        public static void PrintDebug(string text, ConsoleColor color = ConsoleColor.DarkYellow)
+        {
+            //仅在debug模式下才输出相关信息
+            if (!ServerGlobal.debug)
+            {
+                return;
+            }
+
+            //线程ID
+            int tid = Thread.CurrentThread.ManagedThreadId;
+            Console.ForegroundColor = color;
+
+            //Environment.NewLine决定换行符，win和linux不同
+            Console.WriteLine("[Debug] Thread" + tid + "：" + Environment.NewLine + text + Environment.NewLine);
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         /// <summary>  

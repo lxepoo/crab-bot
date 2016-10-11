@@ -28,7 +28,7 @@ namespace CrabBot
             this.id = Thread.CurrentThread.ManagedThreadId;
 
             //因为是循环使用，所以此处需要判断socket是否关闭
-            Common.Tools.PrintLn("Thread" + this.id + "：开始获取数据流...");
+            Common.Tools.PrintLn("Thread" + this.id + "：等待远端发送数据流...");
             if (socket.Connected != true)
             {
                 Common.Tools.PrintLn("Thread" + this.id + "：Socket连接已关闭，本线程结束...", ConsoleColor.Red);
@@ -50,7 +50,8 @@ namespace CrabBot
                 }
                 catch(Exception ex)
                 {
-                    Common.Tools.PrintLn("Thread" + this.id + "：" + ex.ToString(), ConsoleColor.Red);
+                    Common.Tools.PrintLn("Thread" + this.id + "：远程连接已断开！", ConsoleColor.Red);
+                    Common.Tools.PrintDebug(ex.ToString());
                     return;
                 }
 
@@ -85,10 +86,8 @@ namespace CrabBot
             }
             catch (Exception ex)
             {
-                if (ServerGlobal.debug)
-                {
-                    Common.Tools.PrintLn("Thread" + this.id + "：" + ex.ToString(), ConsoleColor.Red);
-                }
+                //打印Debug信息
+                Common.Tools.PrintDebug(ex.ToString());
 
                 result.RequestId = null;
 
@@ -104,14 +103,11 @@ namespace CrabBot
             string result_json = Json<Model.Result>.JsonEncode(result);
             socket.Send(Encoding.UTF8.GetBytes(result_json));
 
-            //DEBUG信息
-            if (ServerGlobal.debug)
-            {
-                Common.Tools.PrintLn("[Thread" + this.id + "]来路信息：", ConsoleColor.DarkGreen);
-                Common.Tools.PrintLn(content, ConsoleColor.DarkCyan);
-                Common.Tools.PrintLn("[Thread" + this.id + "]返回信息：", ConsoleColor.DarkGreen);
-                Common.Tools.PrintLn(result_json, ConsoleColor.DarkCyan);
-            }
+            //打印Debug信息
+            Common.Tools.PrintDebug("来路信息：", ConsoleColor.DarkGreen);
+            Common.Tools.PrintDebug(content, ConsoleColor.DarkCyan);
+            Common.Tools.PrintDebug("返回信息：", ConsoleColor.DarkGreen);
+            Common.Tools.PrintDebug(result_json, ConsoleColor.DarkCyan);
 
             //重复执行
             this.Work();
