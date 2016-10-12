@@ -123,7 +123,7 @@ namespace CrabBot
                 return new Errors.MethodNotExistError(this.Command);
             }
 
-            //通过反射的方式执行命令（方法），分为有参和无参
+            //通过反射的方式执行命令（方法），分为有参和无参，所有机器人命令方法可以没有参数，如果有，只能为Model.Message类
             if(method.GetParameters().Length >0)
             {
                 object[] parameters = new object[1];

@@ -14,9 +14,9 @@ namespace CrabBot
         public static bool debug = false;
 
         /// <summary>
-        /// 数据库连接
+        /// 数据库连接字符串
         /// </summary>
-        public static SqliteConnection conn = null;
+        public static string connStr = null;
 
         /// <summary>
         /// IP地址

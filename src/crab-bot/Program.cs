@@ -88,14 +88,14 @@ namespace CrabBot
             #region 初始化数据库连接等
 
             //数据库路径
-            var dbPath = new SqliteConnectionStringBuilder() { DataSource = data_path + "/CrabBot.db"};
+            ServerGlobal.connStr = (new SqliteConnectionStringBuilder() { DataSource = data_path + "/CrabBot.db"}).ToString();
 
             //创建数据库实例，指定文件位置，使用using是为了自动释放及close数据库连接
-            using (ServerGlobal.conn = new SqliteConnection(dbPath.ToString()))
+            using (var conn = new SqliteConnection(ServerGlobal.connStr))
             {
                 try
                 {
-                    ServerGlobal.conn.Open();
+                    conn.Open();
                     Common.Tools.PrintLn("SQLite数据源连接检查成功！", ConsoleColor.Blue);
                 }
                 catch(Exception ex)
@@ -107,8 +107,6 @@ namespace CrabBot
                 }
             }
 
-            //ServerGlobal.conn.Open();
-            //ServerGlobal.conn.Open();
             //string sql = "CREATE TABLE IF NOT EXISTS student(id integer, name varchar(20), sex varchar(2));";
             //SqliteCommand cmd = new SqliteCommand(sql, ServerGlobal.conn);
             //cmd.ExecuteNonQuery();//如果表不存在，创建数据表  
