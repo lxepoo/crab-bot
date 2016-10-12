@@ -70,6 +70,7 @@ namespace CrabBot
 
             #region 检查Data文件夹等相关逻辑
             string data_path = Directory.GetCurrentDirectory()+"/Data";
+            string ori_path = Directory.GetCurrentDirectory() + "/Original";
             if (!Directory.Exists(data_path))
             {
                 //创建目录
@@ -86,6 +87,16 @@ namespace CrabBot
             #endregion
 
             #region 初始化数据库连接等
+
+            var oridbPath = ori_path + "/OriginalDatabase.db";
+            var dbPath = data_path + "/CrabBot.db";
+
+            //如果库不存在，就copy一份到Data下
+            if (!File.Exists(dbPath))
+            {
+                Common.Tools.PrintLn("数据库文件不存在，即将创建...", ConsoleColor.Blue);
+                File.Copy(oridbPath, dbPath);
+            }
 
             //数据库路径
             ServerGlobal.connStr = (new SqliteConnectionStringBuilder() { DataSource = data_path + "/CrabBot.db"}).ToString();
