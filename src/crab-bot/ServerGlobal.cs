@@ -44,7 +44,7 @@ namespace CrabBot
         /// 注册机器人到集合中
         /// </summary>
         /// <param name="bot"></param>
-        public static void RegisterBot(Model.Bot bot)
+        public static bool RegisterBot(Model.Bot bot)
         {
             //判断是否存在同名的机器人，有则覆盖
             if (ServerGlobal.bots.Keys.Contains(bot.BotId))
@@ -56,6 +56,23 @@ namespace CrabBot
                 //如果没有，就添加到集合
                 ServerGlobal.bots.Add(bot.BotId, bot);
             }
+
+            //覆写数据库记录
+            using (var conn = new SqliteConnection(ServerGlobal.connStr))
+            {
+                try
+                {
+                    conn.Open();
+                }
+                catch (Exception ex)
+                {
+                    //无法连接到数据库，则报错并停止程序
+                    throw new Errors.DbError(ex.Message);
+                }
+            }
+
+            return true;
+
         }
 
         public static void RegisterUser(Model.User user)

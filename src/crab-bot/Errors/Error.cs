@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CrabBot.Errors
 {
-    public class Error
+    public class Error : System.Exception
     {
         /// <summary>
         /// 错误代码
@@ -15,6 +15,18 @@ namespace CrabBot.Errors
         /// <summary>
         /// 错误内容
         /// </summary>
-        public string Content { get; set; }
+        protected string Content { get; set; }
+
+        /// <summary>
+        /// 重写message方法,以让它显示相应异常提示信息
+        /// </summary>
+        public override string Message
+        {
+            get
+            {
+                //根据异常类型从message.xml中读取相应异常提示信息
+                return this.Content;
+            }
+        }
     }
 }

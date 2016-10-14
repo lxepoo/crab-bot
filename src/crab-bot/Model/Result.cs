@@ -10,6 +10,15 @@ namespace CrabBot.Model
     /// </summary>
     public class Result
     {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public Result()
+        {
+            //处理默认值
+            this.Body = new Dictionary<string, object>();
+            this.RequestState = false;
+        }
 
         /// <summary>
         /// 请求ID
@@ -29,8 +38,9 @@ namespace CrabBot.Model
         /// <summary>
         /// 消息主体
         /// 可为空
+        /// 字典类型
         /// </summary>
-        public object Body { get; set; }
+        public Dictionary<string, object> Body { get; set; }
 
         /// <summary>
         /// 消息发起人

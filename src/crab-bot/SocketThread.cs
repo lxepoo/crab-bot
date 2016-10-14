@@ -81,7 +81,17 @@ namespace CrabBot
                 //触发路由
                 Router router = new Router(message);
                 var RouterResult = router.Execute();
-                result.Body = Json<object>.JsonEncode(RouterResult);
+
+                //返回信息
+                if(RouterResult is System.Exception)
+                {
+                    //有可能路由返回的也是错误信息
+                    result.Body.Add("Error", RouterResult);
+                }
+                else
+                {
+                    result.Body.Add("ResultData", RouterResult);
+                }
 
             }
             catch (Exception ex)
@@ -95,7 +105,7 @@ namespace CrabBot
                 result.RequestState = false;
 
                 //构建一个错误返回
-                result.Body = new Errors.RequestFormatError();
+                result.Body.Add("Error", new Errors.RequestFormatError());
             }
 
 
@@ -104,10 +114,8 @@ namespace CrabBot
             socket.Send(Encoding.UTF8.GetBytes(result_json));
 
             //打印Debug信息
-            Common.Tools.PrintDebug("来路信息：", ConsoleColor.DarkGreen);
-            Common.Tools.PrintDebug(content, ConsoleColor.DarkCyan);
-            Common.Tools.PrintDebug("返回信息：", ConsoleColor.DarkGreen);
-            Common.Tools.PrintDebug(result_json, ConsoleColor.DarkCyan);
+            Common.Tools.PrintDebug("来路信息：" + System.Environment.NewLine + content, ConsoleColor.DarkGreen);
+            Common.Tools.PrintDebug("返回信息：" + System.Environment.NewLine + result_json, ConsoleColor.DarkCyan);
 
             //重复执行
             this.Work();

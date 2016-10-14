@@ -58,15 +58,6 @@ namespace CrabBot
         /// </summary>
         public static void ServerInit()
         {
-            //注册一个系统机器人
-            Model.Bot SysBot = new Model.Bot();
-            SysBot.Class = Model.BotClass.System;
-            SysBot.Status = Model.BotStatus.Online;
-            SysBot.BotId = "system";
-            SysBot.Name = "系统机器人";
-            SysBot.Description = "系统机器人主要用于维护整个机器人系统，比如：注册用户、注册机器人、配置相关等。";
-            ServerGlobal.RegisterBot(SysBot);
-
 
             #region 检查Data文件夹等相关逻辑
             string data_path = Directory.GetCurrentDirectory()+"/Data";
@@ -124,6 +115,18 @@ namespace CrabBot
 
             #endregion
 
+            #region 注册系统机器人
+
+            //注册一个系统机器人
+            Model.Bot SysBot = new Model.Bot();
+            SysBot.Class = Model.BotClass.System;
+            SysBot.Status = Model.BotStatus.Online;
+            SysBot.BotId = "system";
+            SysBot.Name = "系统机器人";
+            SysBot.Description = "系统机器人主要用于维护整个机器人系统，比如：注册用户、注册机器人、配置相关等。";
+            ServerGlobal.RegisterBot(SysBot);
+
+            #endregion
         }
     }
 }
