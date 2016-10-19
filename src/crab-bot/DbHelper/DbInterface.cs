@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CrabBot
 {
-    interface DbInterface
+    public interface DbInterface
     {
 
         /// <summary>

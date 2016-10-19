@@ -14,6 +14,45 @@ namespace CrabBot
         public static bool debug = false;
 
         /// <summary>
+        /// 持久化时间间隔（秒）
+        /// 默认是300秒持久化一次
+        /// </summary>
+        public static int persistenceTime = 50000;
+
+        /// <summary>
+        /// 数据库类型
+        /// 有需要可以扩展出其他数据库类型，只需要实现DbInterface接口即可
+        /// </summary>
+        public static string dbType = "SQLite";
+
+        /// <summary>
+        /// 数据库操作对象
+        /// </summary>
+        //public static DbInterface db = null;
+
+        private static DbInterface _db = null;
+
+        public static DbInterface db
+        {
+            get
+            {
+                if (_db == null)
+                {
+                    switch (dbType)
+                    {
+                        case "SQLite":
+                            _db = new DbHelper.SQLite();
+                            break;
+                    }
+                }
+
+                return _db;
+            }
+            set { _db = value; }
+        }
+
+
+        /// <summary>
         /// 数据库连接字符串
         /// </summary>
         public static string connStr = null;
@@ -125,6 +164,18 @@ namespace CrabBot
                 if (temp[0].ToLower() == "port" && Common.Tools.IsPort(temp[1]))
                 {
                     ServerGlobal.port = int.Parse(temp[1]);
+                }
+
+                //自定义持久化时间
+                if (temp[0].ToLower() == "persistencetime" && Common.Tools.IsNumber(temp[1]))
+                {
+                    int time = int.Parse(temp[1]);
+
+                    //间隔时间小于1分钟，或大于60分钟，视为无效
+                    if (time >= 60 && time <= 3600)
+                    {
+                        ServerGlobal.persistenceTime = time;
+                    }
                 }
             }
         }

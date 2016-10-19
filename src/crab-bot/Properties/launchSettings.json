@@ -2,7 +2,7 @@
   "profiles": {
     "crab-bot": {
       "commandName": "Project",
-      "commandLineArgs": "debug=1 ip=127.0.0.1 port=3150"
+      "commandLineArgs": "debug=1 ip=127.0.0.1 port=3150 persistencetime=60"
     }
   }
 }

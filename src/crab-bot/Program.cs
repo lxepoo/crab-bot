@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using Microsoft.Data.Sqlite;
+using System.Threading;
 
 namespace CrabBot
 {
@@ -23,12 +24,15 @@ namespace CrabBot
             Common.Tools.PrintLn("调试模式：" + ServerGlobal.debug.ToString(), ConsoleColor.Blue);
             Common.Tools.PrintLn("监听地址：" + ServerGlobal.ip.ToString(), ConsoleColor.Blue);
             Common.Tools.PrintLn("监听端口：" + ServerGlobal.port.ToString(), ConsoleColor.Blue);
+            Common.Tools.PrintLn("持久化间隔（秒）：" + ServerGlobal.persistenceTime.ToString(), ConsoleColor.Blue);
 
             //执行所有前置操作
             ServerInit();
 
+            //开启持久化工作
+            Persistence();
+
             //定义监听信息
-            Common.Tools.PrintLn("开始创建Socket服务器...");
             IPEndPoint iep = new IPEndPoint(ServerGlobal.ip, ServerGlobal.port);
 
             //创建服务器的socket对象
@@ -43,7 +47,7 @@ namespace CrabBot
             //开始监听连接
             while (true)
             {
-                Console.WriteLine("等待客户端连接...");
+                Common.Tools.PrintLn("Socket服务器已创建，等待客户端连接...", ConsoleColor.Green);
 
                 //线程将一直阻塞直到有新的客户端连接
                 Socket handler = server.Accept();
@@ -60,7 +64,7 @@ namespace CrabBot
         {
 
             #region 检查Data文件夹等相关逻辑
-            string data_path = Directory.GetCurrentDirectory()+"/Data";
+            string data_path = Directory.GetCurrentDirectory() + "/Data";
             string ori_path = Directory.GetCurrentDirectory() + "/Original";
             if (!Directory.Exists(data_path))
             {
@@ -79,39 +83,33 @@ namespace CrabBot
 
             #region 初始化数据库连接等
 
-            var oridbPath = ori_path + "/OriginalDatabase.db";
-            var dbPath = data_path + "/CrabBot.db";
-
-            //如果库不存在，就copy一份到Data下
-            if (!File.Exists(dbPath))
+            if (ServerGlobal.dbType == "SQLite")
             {
-                Common.Tools.PrintLn("数据库文件不存在，即将创建...", ConsoleColor.Blue);
-                File.Copy(oridbPath, dbPath);
+                var oridbPath = ori_path + "/OriginalDatabase.db";
+                var dbPath = data_path + "/CrabBot.db";
+
+                //如果库不存在，就copy一份到Data下
+                if (!File.Exists(dbPath))
+                {
+                    Common.Tools.PrintLn("数据库文件不存在，即将创建...", ConsoleColor.Blue);
+                    File.Copy(oridbPath, dbPath);
+                }
+
+                //数据库路径
+                ServerGlobal.connStr = (new SqliteConnectionStringBuilder() { DataSource = data_path + "/CrabBot.db" }).ToString();
             }
 
-            //数据库路径
-            ServerGlobal.connStr = (new SqliteConnectionStringBuilder() { DataSource = data_path + "/CrabBot.db"}).ToString();
 
-            //创建数据库实例，指定文件位置，使用using是为了自动释放及close数据库连接
-            using (var conn = new SqliteConnection(ServerGlobal.connStr))
+            //测试连通性
+            if (ServerGlobal.db.Check())
             {
-                try
-                {
-                    conn.Open();
-                    Common.Tools.PrintLn("SQLite数据源连接检查成功！", ConsoleColor.Blue);
-                }
-                catch(Exception ex)
-                {
-                    //无法连接到数据库，则报错并停止程序
-                    Common.Tools.PrintLn("无法连接到SQLite数据源或数据库操作出现异常，请检查服务器配置或目录权限！", ConsoleColor.Red);
-                    Common.Tools.PrintLn(ex.ToString(), ConsoleColor.Red);
-                    Console.ReadLine();
-                }
+                Common.Tools.PrintLn("数据源连接检查成功，当前数据源类型：" + ServerGlobal.dbType, ConsoleColor.Green);
             }
-
-            //string sql = "CREATE TABLE IF NOT EXISTS student(id integer, name varchar(20), sex varchar(2));";
-            //SqliteCommand cmd = new SqliteCommand(sql, ServerGlobal.conn);
-            //cmd.ExecuteNonQuery();//如果表不存在，创建数据表  
+            else
+            {
+                Common.Tools.PrintLn("无法连接到数据源或数据库操作出现异常，请检查服务器配置或目录权限！", ConsoleColor.Red);
+                Console.ReadLine();
+            }
 
             #endregion
 
@@ -127,6 +125,29 @@ namespace CrabBot
             ServerGlobal.RegisterBot(SysBot);
 
             #endregion
+        }
+
+        /// <summary>
+        /// 持久化初始化方法
+        /// </summary>
+        public static void Persistence()
+        {
+            //启动计时器，延迟15秒启动，间隔为默认或自定义配置
+            Timer timerClose = new Timer(PersistenceAction, null, 15 * 1000, ServerGlobal.persistenceTime * 1000);
+            Common.Tools.PrintLn("持久化计时器已启动！", ConsoleColor.Green);
+        }
+
+        /// <summary>
+        /// 持久化处理逻辑
+        /// </summary>
+        /// <param name="obj"></param>
+        static void PersistenceAction(object obj)
+        {
+            Common.Tools.PrintLn(DateTime.Now.ToString() + "：【持久化】正在执行...");
+
+            //持久化机器人信息
+
+
         }
     }
 }
