@@ -143,11 +143,20 @@ namespace CrabBot
         /// <param name="obj"></param>
         static void PersistenceAction(object obj)
         {
-            Common.Tools.PrintLn(DateTime.Now.ToString() + "：【持久化】正在执行...");
+            Common.Tools.PrintDebug(DateTime.Now.ToString() + "：【持久化】正在执行...");
 
             //持久化机器人信息
+            if (ServerGlobal.db.BotsPersistence())
+            {
+                Common.Tools.PrintDebug(DateTime.Now.ToString() + "：持久化机器人信息成功！");
+            }
+            else
+            {
+                Common.Tools.PrintDebug(DateTime.Now.ToString() + "：持久化机器人信息失败！");
+            }
 
-
+            //持久化用户信息
+            ServerGlobal.db.UserPersistence();
         }
     }
 }
